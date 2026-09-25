@@ -6,9 +6,10 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge\&logo=python\&logoColor=white)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-WebApp-FF4B4B?style=for-the-badge\&logo=streamlit\&logoColor=white)](https://streamlit.io)
-[![Scikit-learn](https://img.shields.io/badge/Scikit--Learn-KNN-F7931E?style=for-the-badge\&logo=scikit-learn\&logoColor=white)](https://scikit-learn.org)
+[![Scikit-learn](https://img.shields.io/badge/Scikit--Learn-Machine%20Learning-F7931E?style=for-the-badge\&logo=scikit-learn\&logoColor=white)](https://scikit-learn.org)
+[![XGBoost](https://img.shields.io/badge/XGBoost-Boosting-189AB4?style=for-the-badge)](https://xgboost.readthedocs.io/)
 [![Pandas](https://img.shields.io/badge/Pandas-EDA-150458?style=for-the-badge\&logo=pandas\&logoColor=white)](https://pandas.pydata.org)
-[![Plotly](https://img.shields.io/badge/Plotly-Charts-3F4F75?style=for-the-badge\&logo=plotly\&logoColor=white)](https://plotly.com)
+[![Plotly](https://img.shields.io/badge/Plotly-Visualization-3F4F75?style=for-the-badge\&logo=plotly\&logoColor=white)](https://plotly.com)
 [![Status](https://img.shields.io/badge/Status-Live-22c55e?style=for-the-badge)](https://diet-vivek.streamlit.app/)
 
 <br/>
@@ -19,7 +20,7 @@ An end-to-end **Machine Learning-based personalized diet recommendation system**
 
 <br/>
 
-**[Live Demo](#-live-demo) · [Problem Statement](#-problem-statement) · [ML Workflow](#-ml-workflow) · [Model Evaluation](#-model-evaluation) · [Features](#-input-features) · [Diet Plans](#-predicted-diet-classes) · [Challenges](#-challenges-solved) · [Installation](#-installation-guide) · [Author](#-author)**
+**[Live Demo](#-live-demo) · [Problem Statement](#-problem-statement) · [ML Workflow](#-ml-workflow) · [Models](#-machine-learning-models) · [Model Comparison](#-model-comparison) · [Features](#-input-features) · [Diet Plans](#-predicted-diet-classes) · [Challenges](#-challenges-solved) · [Installation](#-installation-guide) · [Author](#-author)**
 
 </div>
 
@@ -39,11 +40,11 @@ An end-to-end **Machine Learning-based personalized diet recommendation system**
 
 ---
 
-## 📌 Problem Statement
+# 📌 Problem Statement
 
 Generic diet plans do not consider the differences between individuals.
 
-Two people with similar weight or fitness goals may require different recommendations depending on factors such as:
+Two people with similar weight or fitness goals may have different health and lifestyle characteristics such as:
 
 * Age
 * BMI
@@ -51,8 +52,11 @@ Two people with similar weight or fitness goals may require different recommenda
 * Blood sugar
 * Cholesterol
 * Fitness goal
+* Dietary preference
+* Region
+* Budget
 
-**NutriPredict AI** uses a machine learning approach to analyze these health-related features and predict a suitable diet category.
+**NutriPredict AI** uses machine learning to analyze these inputs and classify a user into a suitable diet category.
 
 | Traditional Approach             | NutriPredict AI                        |
 | -------------------------------- | -------------------------------------- |
@@ -61,6 +65,7 @@ Two people with similar weight or fitness goals may require different recommenda
 | Limited health indicators        | BMI, sugar & cholesterol considered    |
 | Same recommendation for everyone | Goal and activity-based recommendation |
 | Manual calculations              | Automatic BMI and calorie calculations |
+| Static recommendations           | Interactive web application            |
 
 ---
 
@@ -71,58 +76,177 @@ Two people with similar weight or fitness goals may require different recommenda
                            │
                            ▼
               ┌─────────────────────────┐
-              │    Data Preprocessing    │
+              │   Data Cleaning & EDA   │
               │                         │
-              │ Encoding + BMI +        │
+              │ Missing Values          │
+              │ Duplicates              │
+              │ Outliers                │
+              │ Data Analysis           │
+              └────────────┬────────────┘
+                           │
+                           ▼
+              ┌─────────────────────────┐
+              │   Feature Engineering   │
+              │                         │
+              │ BMI Calculation         │
+              │ Encoding                │
               │ Feature Preparation     │
               └────────────┬────────────┘
                            │
                            ▼
               ┌─────────────────────────┐
-              │       KNN Model         │
-              │      model.pkl          │
+              │    Class Balancing      │
               │                         │
-              │ Finds similar health    │
-              │ profiles using distance │
+              │          SMOTE          │
               └────────────┬────────────┘
                            │
                            ▼
               ┌─────────────────────────┐
-              │   Diet Classification   │
+              │    Model Training       │
               │                         │
-              │ Low Carb                │
-              │ Diabetic                │
-              │ Heart Healthy           │
-              │ Balanced                │
-              │ High Protein            │
+              │ • Random Forest         │
+              │ • Gradient Boosting     │
+              │ • XGBoost               │
               └────────────┬────────────┘
                            │
                            ▼
-                Personalized Result
+              ┌─────────────────────────┐
+              │   Model Evaluation      │
+              │                         │
+              │ Accuracy                │
+              │ Precision               │
+              │ Recall                  │
+              │ F1 Score                │
+              └────────────┬────────────┘
                            │
                            ▼
-            BMI + Diet + Meal Recommendations
+                  Diet Classification
+                           │
+                           ▼
+              Personalized Recommendation
+                           │
+                           ▼
+                 BMI + Diet + Meals
 ```
 
 ---
 
-## 🧠 Why KNN?
+# 🧠 Machine Learning Models
 
-The project uses **K-Nearest Neighbors (KNN)** because it is a similarity-based algorithm.
+NutriPredict AI explores multiple machine learning approaches for diet classification.
 
-KNN identifies data points that are closest to a user's health profile and uses their neighboring patterns to classify the suitable diet category.
+## 🌳 1. Random Forest
 
-### Advantages
+Random Forest is an ensemble learning algorithm that combines multiple decision trees to make a final prediction.
 
-* **Similarity-based:** Useful for matching similar health profiles.
-* **Simple and interpretable:** Easy to understand and explain.
-* **Non-parametric:** Does not assume a particular data distribution.
-* **Suitable for small datasets:** Works effectively for the project's dataset.
-* **Easy deployment:** Can be integrated into a Streamlit application.
+It was used to identify nonlinear relationships between health and lifestyle features.
+
+### Key Advantages
+
+* Handles nonlinear relationships
+* Reduces overfitting compared with a single decision tree
+* Works well with structured/tabular data
+* Can provide feature importance
+* Suitable for classification problems
 
 ---
 
-# 📊 Dataset & EDA
+## 📈 2. Gradient Boosting
+
+Gradient Boosting is an ensemble learning technique that builds models sequentially.
+
+Each new model attempts to correct the errors made by previous models.
+
+```text
+Initial Model
+      ↓
+Calculate Errors
+      ↓
+New Model Learns From Errors
+      ↓
+Repeat
+      ↓
+Final Prediction
+```
+
+### Key Advantages
+
+* Captures nonlinear relationships
+* Sequentially improves predictions
+* Works well with structured data
+* Can provide strong classification performance
+
+---
+
+## 🚀 3. XGBoost
+
+XGBoost stands for **Extreme Gradient Boosting**.
+
+It is an optimized gradient boosting algorithm based mainly on decision trees.
+
+The model builds trees sequentially and uses regularization and gradient-based optimization to improve predictive performance.
+
+### Key Advantages
+
+* Strong performance on tabular data
+* Handles nonlinear relationships
+* Supports regularization
+* Efficient training
+* Supports hyperparameter tuning
+* Provides feature importance
+
+---
+
+# ⚙️ Gradient Descent
+
+Gradient Descent is an **optimization algorithm**, not a classification model.
+
+It is used to minimize a loss or cost function by updating model parameters iteratively.
+
+The basic update rule is:
+
+```text
+θnew = θold - learning_rate × gradient
+```
+
+### Main Concepts
+
+* Loss function
+* Gradient
+* Learning rate
+* Parameter updates
+* Iterative optimization
+
+Gradient Descent is an important optimization concept in machine learning and is used as the foundation for optimization in many predictive models.
+
+---
+
+# 🔬 Model Comparison
+
+Multiple machine learning models were explored during the development of NutriPredict AI.
+
+| Model             | Type                   | Purpose                |
+| ----------------- | ---------------------- | ---------------------- |
+| Random Forest     | Ensemble Tree Model    | Classification         |
+| Gradient Boosting | Boosting Ensemble      | Classification         |
+| XGBoost           | Optimized Boosting     | Classification         |
+| Gradient Descent  | Optimization Algorithm | Parameter Optimization |
+
+The models were evaluated using classification metrics to understand their performance on the diet recommendation problem.
+
+### Model Performance
+
+| Model             |        Accuracy |       Precision |          Recall |        F1 Score |
+| ----------------- | --------------: | --------------: | --------------: | --------------: |
+| Random Forest     | **[Add Score]** | **[Add Score]** | **[Add Score]** | **[Add Score]** |
+| Gradient Boosting | **[Add Score]** | **[Add Score]** | **[Add Score]** | **[Add Score]** |
+| XGBoost           | **[Add Score]** | **[Add Score]** | **[Add Score]** | **[Add Score]** |
+
+> Replace the values above with the actual results from your notebook. No model performance numbers should be added unless they come from the actual evaluation.
+
+---
+
+# 📊 Dataset & Exploratory Data Analysis
 
 The project contains approximately **1,000 health records** covering different user profiles and diet categories.
 
@@ -136,51 +260,72 @@ The project contains approximately **1,000 health records** covering different u
 * Feature engineering
 * Categorical encoding
 * Class distribution analysis
+* Feature selection
+* Data balancing using SMOTE
 
 ### Notebooks
 
-| Notebook                                        | Purpose                                                                            |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `Data Cleaning + EDA.ipynb`                     | Data cleaning, EDA, missing values, outliers and feature analysis                  |
-| `Diet Recommendation Using KNN Algorithm.ipynb` | Feature engineering, model training, SMOTE, feature selection and model evaluation |
+| Notebook                             | Purpose                                                           |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| `Data Cleaning + EDA.ipynb`          | Data cleaning, EDA, missing values, outliers and feature analysis |
+| `Diet Recommendation Using ML.ipynb` | Model training, feature engineering, SMOTE and model evaluation   |
 
 ---
 
 # 📥 Input Features
 
-| # | Feature        | Type        | Description                                     |
-| - | -------------- | ----------- | ----------------------------------------------- |
-| 1 | Age            | Numeric     | User age                                        |
-| 2 | Gender         | Categorical | Gender information                              |
-| 3 | Height         | Numeric     | Height in centimetres                           |
-| 4 | Weight         | Numeric     | Weight in kilograms                             |
-| 5 | BMI            | Derived     | Automatically calculated from height and weight |
-| 6 | Activity Level | Categorical | Low, Moderate or High                           |
-| 7 | Sugar Level    | Numeric     | Blood sugar reading                             |
-| 8 | Cholesterol    | Numeric     | Cholesterol level                               |
-| 9 | Goal           | Categorical | Weight Loss, Maintain or Muscle Gain            |
+The application accepts health and lifestyle information from the user.
 
-### BMI Calculation
+| #  | Feature         | Type                | Description                          |
+| -- | --------------- | ------------------- | ------------------------------------ |
+| 1  | Age             | Numeric             | User age                             |
+| 2  | Gender          | Categorical         | Gender information                   |
+| 3  | Height          | Numeric             | Height in centimetres                |
+| 4  | Weight          | Numeric             | Weight in kilograms                  |
+| 5  | BMI             | Derived             | Calculated from height and weight    |
+| 6  | Activity Level  | Categorical         | User's activity level                |
+| 7  | Sugar Level     | Numeric             | Blood sugar reading                  |
+| 8  | Cholesterol     | Numeric             | Cholesterol level                    |
+| 9  | Goal            | Categorical         | Weight Loss, Maintain or Muscle Gain |
+| 10 | Diet Preference | Categorical         | Vegetarian / Non-Vegetarian          |
+| 11 | Region          | Categorical         | North / South Indian                 |
+| 12 | Budget          | Numeric/Categorical | User's food budget                   |
+
+---
+
+# 🧮 BMI Calculation
+
+BMI is calculated automatically using height and weight.
 
 ```text
-BMI = Weight / Height²
+BMI = Weight (kg) / Height² (m²)
 ```
 
-where height is converted from centimetres to metres.
+For example:
+
+```text
+Weight = 70 kg
+Height = 1.75 m
+
+BMI = 70 / (1.75 × 1.75)
+    = 22.86
+```
+
+The calculated BMI is then used as an important health-related feature.
 
 ---
 
 # 🍽️ Predicted Diet Classes
 
-The model predicts one of the following five diet categories:
+The system predicts one of the following diet categories:
 
-| Class | Diet Plan             | General Purpose                                |
-| ----- | --------------------- | ---------------------------------------------- |
-| 0     | 🥗 Low Carb Diet      | Fat-loss focused profiles                      |
-| 1     | 🩺 Diabetic Diet      | Profiles requiring sugar-aware recommendations |
-| 2     | ❤️ Heart Healthy Diet | Cholesterol and heart-health focused profiles  |
-| 3     | 🍎 Balanced Diet      | General healthy maintenance                    |
-| 4     | 💪 High Protein Diet  | Muscle gain and strength-focused profiles      |
+| Class | Diet Plan             | General Purpose                               |
+| ----- | --------------------- | --------------------------------------------- |
+| 0     | 🥗 Low Carb Diet      | Fat-loss focused profiles                     |
+| 1     | 🩺 Diabetic Diet      | Sugar-aware recommendations                   |
+| 2     | ❤️ Heart Healthy Diet | Cholesterol and heart-health focused profiles |
+| 3     | 🍎 Balanced Diet      | General healthy maintenance                   |
+| 4     | 💪 High Protein Diet  | Muscle gain and strength-focused profiles     |
 
 ### Example Output
 
@@ -194,144 +339,97 @@ Lunch      │ Grilled chicken + rice
 Dinner     │ Protein shake + salad
 ```
 
-> **Note:** These recommendations are generated for the ML project demonstration and should not be treated as medical advice.
+> **Note:** These recommendations are generated for an ML project demonstration and should not be treated as medical advice.
 
 ---
 
 # 📈 Model Evaluation
 
-Several preprocessing and feature-selection approaches were evaluated before selecting the final KNN configuration.
+The models were evaluated using multiple classification metrics.
 
-The evaluation considered both:
+### Evaluation Metrics
 
-* Accuracy
-* Macro F1 Score
+**Accuracy**
 
-Macro F1 was considered because the dataset contains class imbalance and accuracy alone may not represent minority-class performance.
+Measures the percentage of correctly classified predictions.
 
-## Pipeline Comparison
+**Precision**
 
-| # | Pipeline                                      |  Accuracy |
-| - | --------------------------------------------- | --------: |
-| 1 | Baseline KNN                                  |     73.2% |
-| 2 | Forward Feature Selection + SMOTE             |     88.0% |
-| 3 | Forward Feature Selection + GridSearchCV      |     86.4% |
-| 4 | **Backward Feature Selection + GridSearchCV** | **90.8%** |
-| 5 | Correlation-filtered Features + GridSearchCV  |     87.2% |
+Measures how many predicted instances of a class were actually correct.
 
----
+**Recall**
 
-# 🏆 Final Model Configuration
+Measures how many actual instances of a class were correctly identified.
 
-| Parameter                   | Value                                               |
-| --------------------------- | --------------------------------------------------- |
-| Algorithm                   | K-Nearest Neighbors                                 |
-| Feature Selection           | Backward Sequential Feature Selection               |
-| Number of Selected Features | 5                                                   |
-| Final Features              | BMI, Activity Level, Sugar Level, Cholesterol, Goal |
-| Resampling                  | SMOTE                                               |
-| Best K                      | **3**                                               |
-| Distance Metric             | Manhattan                                           |
-| Weight Function             | Distance                                            |
-| Hyperparameter Tuning       | GridSearchCV                                        |
-| Cross Validation            | Stratified K-Fold                                   |
+**F1 Score**
 
----
-
-## 📊 Final Performance
+Provides a balance between precision and recall.
 
 ```text
-Test Accuracy : 90.8%
-
-Macro F1      : 89.4%
-
-Macro Recall  : 92.8%
+F1 Score = 2 × (Precision × Recall)
+           ──────────────────────────
+             Precision + Recall
 ```
 
-### Per-Class Performance
-
-| Diet Class    | Precision | Recall |    F1 |
-| ------------- | --------: | -----: | ----: |
-| Balanced Diet |      0.88 |   1.00 |  0.94 |
-| Diabetic Diet |      0.98 |   0.88 |  0.93 |
-| Heart Healthy |      0.91 |   0.95 |  0.93 |
-| High Protein  |      0.72 |   0.87 |  0.79 |
-| Low Carb      |      0.85 |  ~0.85 | ~0.85 |
+Macro-averaged metrics can also be used when the dataset contains class imbalance because they give equal importance to each class.
 
 ---
 
-# 📸 App Preview
+# ⚖️ Handling Class Imbalance
 
-<p align="center">
+The dataset contained an uneven distribution among different diet categories.
 
-<img src="assets/Project Screenshots/desktop view.png" width="48%" alt="NutriPredict AI Input Screen" />
+To address this issue, **SMOTE (Synthetic Minority Over-sampling Technique)** was used during model development.
 
-<img src="assets/Project Screenshots/desktop-results 1.png" width="48%" alt="NutriPredict AI Results Dashboard" />
+```text
+Original Dataset
+       ↓
+Identify Minority Classes
+       ↓
+Generate Synthetic Samples
+       ↓
+Balanced Training Data
+       ↓
+Model Training
+```
 
-</p>
-
-<p align="center">
-<i>NutriPredict AI input interface and personalized diet recommendation dashboard.</i>
-</p>
-
----
-
-# ✨ App Features
-
-### 🎨 Modern UI
-
-Custom Streamlit interface with a clean, responsive design.
-
-### 📊 BMI Gauge
-
-Interactive Plotly gauge showing the calculated BMI.
-
-### 📋 Health KPI Cards
-
-Displays important metrics such as:
-
-* BMI
-* Sugar Level
-* Cholesterol
-* Activity Level
-
-### 🍽️ Meal Recommendations
-
-Provides meal suggestions for:
-
-* Breakfast
-* Lunch
-* Dinner
-
-### 🔄 Try Again
-
-Users can enter a new health profile without restarting the application.
-
-### 💾 Session State
-
-Streamlit session state is used to maintain the input → prediction → result flow.
+SMOTE was applied to the training data to reduce the impact of class imbalance.
 
 ---
 
-# 🛠️ Challenges Solved
+# 🎯 Feature Engineering
 
-## 1. Class Imbalance
+Feature engineering was performed to create useful information from the raw inputs.
 
-The dataset contained an uneven distribution between diet categories.
+### BMI
 
-**Solution:**
+Height and weight were used to calculate BMI.
 
-SMOTE was used to improve representation of minority classes during training.
+```text
+BMI = Weight / Height²
+```
+
+### Categorical Encoding
+
+Categorical features such as:
+
+```text
+Gender
+Activity Level
+Goal
+Diet Preference
+Region
+```
+
+were converted into numerical representations before model training.
 
 ---
 
-## 2. Feature Selection
+# 🔍 Feature Selection
 
-Using every available feature did not necessarily improve model performance.
+Feature selection was performed to identify useful variables for model training.
 
-Feature-selection experiments were performed to identify a smaller set of useful features.
-
-The final model uses:
+Important health-related features included:
 
 ```text
 BMI
@@ -341,43 +439,93 @@ Cholesterol
 Goal
 ```
 
-This also makes the final model easier to explain.
+Feature selection helps:
+
+* Reduce unnecessary features
+* Simplify the model
+* Improve interpretability
+* Reduce computational complexity
+* Focus on relevant information
 
 ---
 
-## 3. Categorical Encoding
+# 🧩 Challenges Solved
 
-Machine learning algorithms require numerical input.
+## 1. Class Imbalance
 
-Categorical variables such as:
+### Problem
+
+Some diet categories had fewer samples than others.
+
+### Solution
+
+SMOTE was used on the training data to generate synthetic samples for minority classes.
+
+---
+
+## 2. Feature Selection
+
+### Problem
+
+Using every available feature does not always improve model performance.
+
+### Solution
+
+Feature-selection techniques were explored to identify relevant health and lifestyle features.
+
+---
+
+## 3. Categorical Data
+
+### Problem
+
+Machine learning algorithms require numerical inputs.
+
+### Solution
+
+Categorical variables were encoded into numerical representations before model training.
+
+---
+
+## 4. Model Selection
+
+### Problem
+
+Different machine learning algorithms can behave differently on structured health datasets.
+
+### Solution
+
+Multiple models were explored:
 
 ```text
-Gender
-Activity Level
-Goal
+Random Forest
+Gradient Boosting
+XGBoost
 ```
 
-were converted into numerical representations before being passed to the KNN model.
+Their classification performance was evaluated using multiple metrics.
 
 ---
 
-## 4. Hyperparameter Tuning
+## 5. Hyperparameter Tuning
 
-Different KNN configurations were evaluated using GridSearchCV.
+Model parameters were tuned to improve classification performance.
 
-Parameters such as:
+Parameters explored included model-specific settings such as:
 
 ```text
-n_neighbors
-weights
-distance metric
+Number of Estimators
+Tree Depth
+Learning Rate
+Minimum Samples
+Regularization Parameters
 ```
 
-were evaluated to identify an effective configuration.
+The final configuration depends on the model selected for deployment.
 
 ---
 
-## 5. Streamlit State Management
+## 6. Streamlit State Management
 
 Streamlit reruns the Python script whenever a widget changes.
 
@@ -393,21 +541,78 @@ Results Dashboard
 
 ---
 
-# 🧰 Tech Stack
+# ✨ Application Features
 
-| Layer                 | Technology                 |
-| --------------------- | -------------------------- |
-| Programming Language  | Python 3.10+               |
-| Data Processing       | Pandas, NumPy              |
-| Machine Learning      | Scikit-learn               |
-| Algorithm             | K-Nearest Neighbors        |
-| Imbalanced Data       | SMOTE                      |
-| Hyperparameter Tuning | GridSearchCV               |
-| Web Application       | Streamlit                  |
-| Visualization         | Plotly                     |
-| Model Storage         | Pickle                     |
-| Development           | Jupyter Notebook / VS Code |
-| Deployment            | Streamlit Cloud            |
+## 🎨 Modern UI
+
+A custom Streamlit interface provides a clean and responsive user experience.
+
+## 📊 BMI Gauge
+
+An interactive Plotly gauge displays the calculated BMI.
+
+## 📋 Health KPI Cards
+
+The application displays important metrics such as:
+
+* BMI
+* Sugar Level
+* Cholesterol
+* Activity Level
+
+## 🍽️ Meal Recommendations
+
+The application provides meal suggestions for:
+
+* Breakfast
+* Lunch
+* Dinner
+
+## 🔄 Try Again
+
+Users can enter a new health profile and generate another recommendation.
+
+## 💾 Session State
+
+Streamlit session state maintains the input → prediction → result workflow.
+
+---
+
+# 🛠️ Tech Stack
+
+| Layer                 | Technology                                |
+| --------------------- | ----------------------------------------- |
+| Programming Language  | Python 3.10+                              |
+| Data Processing       | Pandas, NumPy                             |
+| Machine Learning      | Scikit-learn                              |
+| Models                | Random Forest, Gradient Boosting, XGBoost |
+| Optimization          | Gradient Descent                          |
+| Imbalanced Data       | SMOTE                                     |
+| Hyperparameter Tuning | GridSearchCV                              |
+| Feature Selection     | Feature Selection Techniques              |
+| Web Application       | Streamlit                                 |
+| Visualization         | Plotly                                    |
+| Model Storage         | Pickle                                    |
+| Development           | Jupyter Notebook / VS Code                |
+| Deployment            | Streamlit Community Cloud                 |
+
+---
+
+# 📸 App Preview
+
+<p align="center">
+
+<img src="assets/Project Screenshots/desktop view.png" width="48%" alt="NutriPredict AI Input Screen" />
+
+<img src="assets/Project Screenshots/desktop-results 1.png" width="48%" alt="NutriPredict AI Results Dashboard" />
+
+</p>
+
+<p align="center">
+
+<i>NutriPredict AI input interface and personalized diet recommendation dashboard.</i>
+
+</p>
 
 ---
 
@@ -415,6 +620,7 @@ Results Dashboard
 
 ```text
 NutriPredict-AI/
+
 │
 ├── .streamlit/
 │   └── config.toml
@@ -435,7 +641,7 @@ NutriPredict-AI/
 │   └── model.pkl
 │
 ├── Data Cleaning + EDA.ipynb
-├── Diet Recommendation Using KNN Algorithm.ipynb
+├── Diet Recommendation Using ML.ipynb
 ├── drs.py
 ├── requirements.txt
 └── README.md
@@ -448,7 +654,7 @@ NutriPredict-AI/
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Pujadevare445/Diat.git
+git clone https://github.com/VivekChaudhari16/Diat.git
 ```
 
 ## 2. Navigate to the Project
@@ -463,7 +669,7 @@ cd Diat
 pip install -r requirements.txt
 ```
 
-## 4. Run the Streamlit App
+## 4. Run the Streamlit Application
 
 ```bash
 streamlit run drs.py
@@ -475,7 +681,7 @@ streamlit run drs.py
 http://localhost:8501
 ```
 
-> **Note:** The trained model should be available at `model/model.pkl`.
+> **Note:** Make sure the trained model is available at `model/model.pkl`.
 
 ---
 
@@ -483,25 +689,29 @@ http://localhost:8501
 
 The application is deployed using **Streamlit Community Cloud**.
 
-### Live Application
+### 🔗 Live Application
 
-🔗 **https://diet-vivek.streamlit.app/**
+**https://diet-vivek.streamlit.app/**
 
 ---
 
 # 🎯 Project Highlights
 
-* Built an end-to-end ML recommendation system.
+* Built an end-to-end **Machine Learning-based diet recommendation system**.
 * Performed data cleaning and exploratory data analysis.
 * Implemented feature engineering.
-* Used BMI as a derived health feature.
-* Handled class imbalance using SMOTE.
+* Calculated BMI automatically from height and weight.
+* Encoded categorical variables for machine learning.
+* Handled class imbalance using **SMOTE**.
 * Performed feature selection.
-* Tuned KNN hyperparameters using GridSearchCV.
-* Achieved **90.8% test accuracy**.
-* Achieved **89.4% Macro F1**.
+* Experimented with **Random Forest, Gradient Boosting and XGBoost**.
+* Used **Gradient Descent as an optimization concept**.
+* Evaluated models using Accuracy, Precision, Recall and F1 Score.
+* Implemented hyperparameter tuning.
 * Built an interactive Streamlit web application.
 * Added Plotly-based BMI visualization.
+* Added personalized meal recommendations.
+* Implemented Streamlit session state.
 * Deployed the application online.
 
 ---
@@ -516,26 +726,4 @@ The application is deployed using **Streamlit Community Cloud**.
 
 <br/>
 
-[![GitHub](https://img.shields.io/badge/GitHub-VivekChaudhari16-181717?style=for-the-badge\&logo=github)](https://github.com/VivekChaudhari16)
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Vivek%20Chaudhari-0A66C2?style=for-the-badge\&logo=linkedin)](https://www.linkedin.com/in/vivek-chaudhari-9653b1371/)
-
-<br/>
-
-Open to opportunities in **Data Analytics, Data Science, Machine Learning and AI/ML**.
-
-</div>
-
----
-
-<div align="center">
-
-### 🥗 Built with Python + Machine Learning + Streamlit
-
-**NutriPredict AI**
-
-*Turning health data into personalized diet recommendations.*
-
-⭐ If you find this project useful, consider giving the repository a star!
-
-</div>
+[![GitHub](https://img.shields.io/badge/GitHub-VivekChaudhari16-181717?style=for-the-badge\&logo=github\&logoColor=white)](https://github.com/VivekChaudhari16)
